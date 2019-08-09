@@ -73,6 +73,7 @@ Many prefer to use higher-level analysis tools such Wireshark, _but I believe it
     tcpdump -E
 
 ### For more options, read manual:
+
 * Find all options [here](https://www.cyberciti.biz/howto/question/man/tcpdump-man-page-with-examples.php)
 
 # BASIC USAGE
@@ -81,9 +82,7 @@ Many prefer to use higher-level analysis tools such Wireshark, _but I believe it
 
     tcpdump -D
     tcpdump --list-interfaces
-
-# Basic Commands
-    
+   
 ### Let’s start with a basic command that will get us HTTPS traffic:
 
     tcpdump -nnSX port 443
@@ -101,45 +100,45 @@ Many prefer to use higher-level analysis tools such Wireshark, _but I believe it
     
     tcpdump net 1.2.3.0/24
 
-
-
-### Basic communication (very verbose)
-
-* Low - Good amount of traffic, with verbosity and no name help
+#### Low Output: 
 
     tcpdump -nnvvS
 
-* Medium - -We add -X for payload but doesn’t grab any more of the packet
+#### Medium Output: 
 
     tcpdump -nnvvXS
 
-* Heavy - The final “s” increases the snaplength, grabbing the whole packet
+#### Heavy Output:
+
     tcpdump -nnvvXSs 1514
 
 
 # Getting Creative
 
-Expressions are very nice, but the real magic of tcpdump comes from the ability to combine them in creative ways in order to isolate exactly what you’re looking for. 
+* Expressions are very nice, but the real magic of tcpdump comes from the ability to combine them in creative ways in order to isolate exactly what you’re looking for. 
 
 ## There are three ways to do combination:
 
 ### AND
+
     and or &&
 
 ### OR
+
     or or ||
 
 ### EXCEPT
+    
     not or !
 
-## Example: 
+# Usage Example: 
 
 ### Traffic that’s from 192.168.1.1 AND destined for ports 3389 or 22
     
     tcpdump 'src 192.168.1.1 and (dst port 3389 or 22)'
 
 
-# Advanced
+# Advanced 
 
 ### Show me all URG packets:
     
@@ -184,7 +183,6 @@ Expressions are very nice, but the real magic of tcpdump comes from the ability 
 ### Print Captured Packets in ASCII
 
     tcpdump -A -i eth0
-
 
 ### Display Captured Packets in HEX and ASCII
     
@@ -274,8 +272,6 @@ Expressions are very nice, but the real magic of tcpdump comes from the ability 
 
     tcpdump -i eth0 -w cap.txt
 
-
-
 ### Get Packet Contents with Hex Output
 
     tcpdump -c 1 -X icmp
@@ -290,35 +286,29 @@ Expressions are very nice, but the real magic of tcpdump comes from the ability 
     tcpdump icmp
 
 ### Find Traffic by IP
-One of the most common queries, using host, you can see traffic that’s going to or from 1.1.1.1.
 
     tcpdump host 1.1.1.1
 
 ### Filtering by Source and/or Destination
-* If you only want to see traffic in one direction or the other, you can use src and dst.
 
     tcpdump src 1.1.1.1 
     tcpdump dst 1.0.0.1
 
 ### Finding Packets by Network
-* To find packets going to or from a particular network or subnet, use the net option.
     
     tcpdump net 1.2.3.0/24
 
 
 ### Get Packet Contents with Hex Output
-* Hex output is useful when you want to see the content of the packets in question, and it’s often best used when you’re isolating a few candidates for closer scrutiny.
-    
+   
     tcpdump -c 1 -X icmp
 
 ### Show Traffic Related to a Specific Port
-* You can find specific port traffic by using the port option followed by the port number.
-    
+
     tcpdump port 3389 
     tcpdump src port 1025
 
 ### Show Traffic of One Protocol
-* If you’re looking for one particular kind of traffic, you can use tcp, udp, icmp, and many others as well.
 
     tcpdump icmp
 
@@ -331,54 +321,41 @@ One of the most common queries, using host, you can see traffic that’s going t
     tcpdump portrange 21-23
 
 ### Find Traffic Based on Packet Size
-* If you’re looking for packets of a particular size you can use these options. You can use less, greater, or their associated symbols that you would expect from mathematics.
-    
-    tcpdump less 32 
-    tcpdump greater 64 
-    tcpdump <= 128
-    tcpdump => 128
+
+     tcpdump less 32 
+     tcpdump greater 64 
+     tcpdump <= 128
+     tcpdump => 128
 
 ### Reading / Writing Captures to a File (pcap)
-* It’s often useful to save packet captures into a file for analysis in the future. 
     
     tcpdump port 80 -w capture_file
-
-* You can read PCAP files by using the -r switch. Note that you can use all the regular commands within tcpdump while reading in a file; you’re only limited by the fact that you can’t capture and process what doesn’t exist in the file already.
-
     tcpdump -r capture_file
 
 
 # It’s All About the Combinations
 
 ### Raw Output View
-* Use this combination to see verbose output, with no resolution of hostnames or port numbers, using absolute sequence numbers, and showing human-readable timestamps.
 
     tcpdump -ttnnvvS
 
 ## Here are some examples of combined commands.
 
 ### From specific IP and destined for a specific Port
-* Let’s find all traffic from 10.5.2.3 going to any host on port 3389.
 
     tcpdump -nnvvS src 10.5.2.3 and dst port 3389
 
 ### From One Network to Another
-* Let’s look for all traffic coming from 192.168.x.x and going to the 10.x or 172.16.x.x networks
 
     tcpdump -nvX src net 192.168.0.0/16 and dst net 10.0.0.0/8 or 172.16.0.0/16
 
 ### Non ICMP Traffic Going to a Specific IP
-* This will show us all traffic going to 192.168.0.2 that is not ICMP.
     
     tcpdump dst 192.168.0.2 and src net and not icmp
 
 ### Traffic From a Host That Isn’t on a Specific Port
-* This will show us all traffic from a host that isn’t SSH traffic (assuming default port usage).
     
     tcpdump -vv src mars and not dst port 22
-
-### Isolate TCP Flags
-* You can also use filters to isolate packets with specific TCP flags set.
 
 ### Isolate TCP RST flags.
 
@@ -429,13 +406,8 @@ One of the most common queries, using host, you can see traffic that’s going t
     
     tcpdump -nn -A -s1500 -l | egrep -i 'User-Agent:|Host:'
 
-### Capture only HTTP GET and POST packets
-* Going deep on the filter we can specify only packets that match GET.
-    
+### Capture only HTTP GET and POST packets only packets that match GET.
     tcpdump -s 0 -A -vv 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
-
-* Alternatively we can select only on POST requests. Note that the POST data may not be included in the packet captured with this filter. It is likely that a POST request will be split across multiple TCP data packets.
-    
     tcpdump -s 0 -A -vv 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504f5354'
 
 ### Extract HTTP Request URL's
@@ -451,7 +423,6 @@ One of the most common queries, using host, you can see traffic that’s going t
     tcpdump -nn -A -s0 -l | egrep -i 'Set-Cookie|Host:|Cookie:'
 
 ### Capture all ICMP packets
-* See all ICMP packets on the wire.
     
     tcpdump -n icmp
 
@@ -460,12 +431,10 @@ One of the most common queries, using host, you can see traffic that’s going t
     tcpdump 'icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply'
 
 ### Capture SMTP / POP3 Email
-* It is possible to extract email body and other data, in this example we are only parsing the email recipients.
     
     tcpdump -nn -l port 25 | grep -i 'MAIL FROM\|RCPT TO'
 
 ### Troubleshooting NTP Query and Response
-* In this example we see the NTP query and response.
     
     tcpdump dst port 123
 
@@ -495,11 +464,11 @@ One of the most common queries, using host, you can see traffic that’s going t
   
 * On Target: 
 
-        nmap -p 80 --script=http-enum.nse targetip
+      nmap -p 80 --script=http-enum.nse targetip
 
 * On Server:  
 
-        tcpdump -nn port 80 | grep "GET /"
+      tcpdump -nn port 80 | grep "GET /"
         
            GET /w3perl/ HTTP/1.1
            GET /w-agora/ HTTP/1.1
@@ -514,12 +483,10 @@ One of the most common queries, using host, you can see traffic that’s going t
     tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet'
 
 ### Capture DNS Request and Response
-* Outbound DNS request to Google public DNS and the A record (ip address) response can be seen in this capture.
     
     tcpdump -i wlp58s0 -s0 port 53
 
 ### Capture HTTP data packets
-* Only capture on HTTP data packets on port 80. Avoid capturing the TCP session setup (SYN / FIN / ACK).
     
     tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
 
@@ -527,8 +494,7 @@ One of the most common queries, using host, you can see traffic that’s going t
     
     ssh wuseman@localhost 'tcpdump -s0 -c 1000 -nn -w - not port 22' | wireshark -k -i -
 
-
-Top Hosts by Packets
+### Top Hosts by Packets
     
     tcpdump -nnn -t -c 200 | cut -f 1,2,3,4 -d '.' | sort | uniq -c | sort -nr | head -n 20
 
@@ -555,7 +521,6 @@ Top Hosts by Packets
     tcpdump -vvAls0 | grep 'Set-Cookie|Host:|Cookie:'
 
 ### Find SSH Connections
-* This one works regardless of what port the connection comes in on, because it’s getting the banner response.
     
     tcpdump 'tcp[(tcp[12]>>2):4] = 0x5353482D'
 
@@ -583,41 +548,32 @@ Top Hosts by Packets
     tcpdump 'ip[6] & 128 != 0'
 
 ### Filter on protocol (ICMP) and protocol-specific fields (ICMP type)
-* Capture all ICMP with some exceptions. 
-* For example, if a host runs lots of pings (SmokePing for example), it is useful to suppress ICMP echo requests and replies from dumped packets:
 
-    tcpdump -n icmp and 'icmp[0] != 8 and icmp[0] != 0'
+tcpdump -n icmp and 'icmp[0] != 8 and icmp[0] != 0'
 
 ### Same command can be used with predefined header field offset (icmptype) and ICMP type field values (icmp-echo and icmp-echoreply):
 
     tcpdump -n icmp and icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply
 
 ### Filter on TOS field
-* Capture all IP packets with a non-zero TOS field (one byte TOS field is at offset 1 in IP header):
 
     tcpdump -v -n ip and ip[1]!=0
 
 ### Filter on TTL field
-* Capture all IP packets with TTL less than some value (on byte TTL field is at offset 8 in IP header):
 
     tcpdump -v ip and 'ip[8]<2'
 
-Filter on TCP flags (SYN/ACK)
+### Filter on TCP flags (SYN/ACK)
 
     tcpdump -n tcp and port 80 and 'tcp[tcpflags] & tcp-syn == tcp-syn'
 
 ### In the example above, all packets with TCP SYN flag set are captured. Other flags (ACK, for example) might be set also. Packets which have only TCP SYN flags set, can be captured 
-
-* like this:
 
     tcpdump tcp and port 80 and 'tcp[tcpflags] == tcp-syn'
 
 ### Catch TCP SYN/ACK packets (typically, responses from servers):
 
     tcpdump -n tcp and 'tcp[tcpflags] & (tcp-syn|tcp-ack) == (tcp-syn|tcp-ack)'
-
-* Same thing:
-
     tcpdump -n tcp and 'tcp[tcpflags] & tcp-syn == tcp-syn' and 'tcp[tcpflags] & tcp-ack == tcp-ack'
 
 ### Catch ARP packets
@@ -625,7 +581,6 @@ Filter on TCP flags (SYN/ACK)
     tcpdump -vv -e -nn ether proto 0x0806
 
 ### Filter on IP packet length
-* Catch packets of a specified length (IP packet length (16 bits) is located at offset 2 in IP header):
 
     tcpdump -l icmp and '(ip[2:2]>50)' -w - |tcpdump -r - -v ip and '(ip[2:2]<60)'
 
@@ -638,7 +593,7 @@ F### ilter on encapsulated content (ICMP within PPPoE)
     tcpdump -v -n icmp
 
 ### Queiter
-* Using -q supresses some protocol information, -t supresses timestamps.
+
     tcpdump -q -i eth0
     tcpdump -t -i eth0
     tcpdump -A -n -q -i eth0 'port 80'
@@ -650,14 +605,12 @@ F### ilter on encapsulated content (ICMP within PPPoE)
     tcpdump -A -s 0 -q -t -i eth0 'port 80 and ( ((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12:2]&0xf0)>>2)) != 0)'
 
 ### Dump SIP Traffic
-* This is useful for debugging Asterisk or FreeSWITCH.
 
     tcpdump -nq -s 0 -A -vvv port 5060 and host 1.2.3.4
 
 ### Checking packet content
 
     tcpdump -i any -c10 -nn -A port 80
-
 
 ### Checking packet content
 
