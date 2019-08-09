@@ -588,7 +588,7 @@ tcpdump -n icmp and 'icmp[0] != 8 and icmp[0] != 0'
 
     tcpdump -v -n icmp and '(ip[2:2]>50)' and '(ip[2:2]<60)'
 
-F### ilter on encapsulated content (ICMP within PPPoE)
+### Filter on encapsulated content (ICMP within PPPoE)
 
     tcpdump -v -n icmp
 
@@ -599,9 +599,8 @@ F### ilter on encapsulated content (ICMP within PPPoE)
     tcpdump -A -n -q -i eth0 'port 80'
     tcpdump -A -n -q -t -i eth0 'port 80'
 
-#Advanced Filtering
-
 ### Print only useful packets from the HTTP traffic
+ 
     tcpdump -A -s 0 -q -t -i eth0 'port 80 and ( ((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12:2]&0xf0)>>2)) != 0)'
 
 ### Dump SIP Traffic
