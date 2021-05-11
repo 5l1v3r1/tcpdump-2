@@ -627,6 +627,16 @@ tcpdump -n icmp and 'icmp[0] != 8 and icmp[0] != 0'
 
 * https://opensource.com/article/18/10/introduction-tcpdump
 
+* https://programming.vip/docs/tcpdump-and-some-default-ports-of-linux.html
+
+* https://www.hackingarticles.in/comprehensive-guide-to-tcpdump-part-1/
+
+* https://www.hackingarticles.in/comprehensive-guide-to-tcpdump-part-2/
+
+* https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf
+
+* https://sectools.org/tool/tcpdump/
+
 #### CONTACT 
 
 If you have problems, questions, ideas or suggestions please contact
